@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>李馨茹</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: #000;
+    color: #fff;
+    font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+  }
+
+  /* Top loading bar */
+  .loader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: #f9d71c;
+    z-index: 9999;
+    transform-origin: left;
+    animation: loading 1.8s ease-out forwards;
+  }
+  @keyframes loading {
+    0%   { transform: scaleX(0); }
+    100% { transform: scaleX(1); }
+  }
+
+  .section {
+    min-height: 100vh;
+    position: relative;
+    background: #000;
+    overflow: hidden;
+  }
+
+  /* ============== HERO ============== */
+  .hero {
+    display: block;
+    height: 100vh;
+    padding-top: 80px;
+    box-sizing: border-box;
+  }
+
+  /* Background image (exactly as the reference, no modifications) */
+  .hero-stage {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Scroll-down hint at top of inner-page (between hero and videos) */
+  .scroll-hint {
+    position: absolute;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    z-index: 10;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    animation: scroll-bounce 2.2s ease-in-out infinite;
+    transition: color 0.2s ease;
+  }
+  .scroll-hint:hover { color: #fff; }
+  .scroll-hint svg {
+    width: 28px;
+    height: 28px;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.6));
+  }
+  @keyframes scroll-bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0);   opacity: 0.65; }
+    50%      { transform: translateX(-50%) translateY(10px); opacity: 1; }
+  }
+
+  /* Hero links - kept in the same positions as the reference image */
+  .hero-link {
+    position: absolute;
+    color: #fff;
+    text-decoration: none;
+    font-size: clamp(16px, 1.6vw, 24px);
+    font-weight: 400;
+    letter-spacing: 1px;
+    z-index: 10;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: color 0.25s ease, transform 0.25s ease;
+  }
+  .hero-link:hover {
+    color: #f9d71c;
+    transform: translateX(4px);
+  }
+  .hero-link .arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-size: 14px;
+    line-height: 1;
+  }
+  .link-resume    { right: 4.5%; top: 48%; }
+  .link-portfolio { right: 4.5%; top: 68%; }
+
+  /* ============== TOP FLOATING NAV (frosted glass) ============== */
+  .top-nav {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 10px 14px 10px 22px;
+    background: rgba(15, 15, 15, 0.45);
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 100px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  }
+
+  .top-nav .nav-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    padding: 7px 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 200px;
+    background: transparent;
+    font-family: inherit;
+    cursor: pointer;
+    display: inline-block;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .top-nav .nav-link:hover {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+  }
+
+  @media (max-width: 640px) {
+    .top-nav {
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      padding: 8px 10px 8px 16px;
+    }
+    .top-nav .nav-link {
+      font-size: 12px;
+      padding: 6px 14px;
+    }
+  }
+
+  /* ============== INNER PAGE (videos) ============== */
+  .inner-page { padding: 240px 20px 90px; }
+
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 20px;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .video-item {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .video-card {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #111;
+    cursor: pointer;
+  }
+
+  .video-label {
+    color: #fff;
+    font-size: clamp(15px, 1.2vw, 19px);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    padding: 2px 4px;
+  }
+  .video-card video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .play-icon {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .video-card:hover .play-icon { opacity: 1; }
+  .play-icon svg {
+    width: 56px; height: 56px;
+    fill: #f9d71c;
+  }
+
+  /* ============== MODAL ============== */
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal.active { display: flex; }
+  .modal video {
+    max-width: 92vw;
+    max-height: 92vh;
+    background: #000;
+  }
+  .modal-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid #f9d71c;
+    background: transparent;
+    color: #f9d71c;
+    font-size: 22px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+  }
+  .modal-close:hover { background: #f9d71c; color: #000; }
+
+  /* ============== PDF MODAL (简历 / 全部作品) ============== */
+  .pdf-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #1a1a1a;
+    z-index: 10000;
+    flex-direction: column;
+  }
+  .pdf-modal.active { display: flex; }
+
+  .pdf-nav {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 14px 10px 22px;
+    background: rgba(15, 15, 15, 0.45);
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 100px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  }
+
+  .pdf-back {
+    color: #fff;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 200px;
+    padding: 7px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    letter-spacing: 1px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .pdf-back:hover {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+  }
+  .pdf-back .back-arrow {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .pdf-title {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    flex: 1;
+    text-align: center;
+  }
+
+  .pdf-close {
+    color: #fff;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .pdf-close:hover {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+  }
+
+  .pdf-viewer {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #fff;
+  }
+
+  .pdf-fallback {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    z-index: 1;
+  }
+  .pdf-fallback a {
+    color: #f9d71c;
+    text-decoration: underline;
+  }
+
+  /* ============== FLASHLIGHT EFFECT ============== */
+  .flashlight {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.62);
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+
+    /* The "hole" follows the mouse via CSS vars --mx / --my */
+    -webkit-mask-image: radial-gradient(
+      circle 280px at var(--mx, 50%) var(--my, 50%),
+      transparent 0%,
+      transparent 22%,
+      rgba(0,0,0,0.35) 55%,
+      rgba(0,0,0,0.85) 85%,
+      black 100%
+    );
+    mask-image: radial-gradient(
+      circle 280px at var(--mx, 50%) var(--my, 50%),
+      transparent 0%,
+      transparent 22%,
+      rgba(0,0,0,0.35) 55%,
+      rgba(0,0,0,0.85) 85%,
+      black 100%
+    );
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  .flashlight.is-active { opacity: 1; }
+
+  @media (hover: none), (pointer: coarse) {
+    .flashlight { display: none; }
+  }
+
+  /* ============== THANK SECTION ============== */
+  .thank {
+    background: #000;
+    overflow: hidden;
+  }
+
+  .thank-stage {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    padding-top: 80px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .thank-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 100vh;
+    object-fit: contain;
+
+    /* Initial state: hidden, scaled down */
+    opacity: 0;
+    transform: scale(0.55);
+    transition:
+      opacity   0.9s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+    will-change: opacity, transform;
+  }
+
+  /* Triggered by IntersectionObserver */
+  .thank-img.is-visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ============== Responsive ============== */
+  @media (max-width: 960px) {
+    .video-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .video-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="nav-link" href="#"
+     data-pdf="pdfs/resume.pdf"
+     data-pdf-title="RESUME">简历</a>
+  <a class="nav-link" href="#"
+     data-pdf="pdfs/portfolio.pdf"
+     data-pdf-title="PORTFOLIO">全部作品</a>
+</nav>
+
+<div class="flashlight"></div>
+<div class="loader"></div>
+
+<!-- ============== Homepage ============== -->
+<section class="section hero">
+  <div class="hero-stage">
+    <img class="hero-img" src="images/cover.jpg" alt="">
+  </div>
+</section>
+
+<!-- ============== Inner Page (3 Videos) ============== -->
+<section class="section inner-page" id="inner-page">
+  <a class="scroll-hint" href="#inner-page" aria-label="向下滚动查看更多">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <polyline points="6 9 12 15 18 9"
+                stroke="currentColor" stroke-width="2"
+                fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+  <div class="video-grid">
+    <div class="video-item">
+      <div class="video-card" data-src="videos/qingzhao.mp4">
+        <video src="videos/qingzhao.mp4" muted loop autoplay playsinline></video>
+        <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      </div>
+      <div class="video-label">轻爪品牌设计短片</div>
+    </div>
+    <div class="video-item">
+      <div class="video-card" data-src="videos/dec4.mp4">
+        <video src="videos/dec4.mp4" muted loop autoplay playsinline></video>
+        <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      </div>
+      <div class="video-label">伢伢乐AIGC短片</div>
+    </div>
+    <div class="video-item">
+      <div class="video-card" data-src="videos/aug7.mp4">
+        <video src="videos/aug7.mp4" muted loop autoplay playsinline></video>
+        <div class="play-icon"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
+      </div>
+      <div class="video-label">三星堆网页展示</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============== THANK Section (end) ============== -->
+<section class="section thank">
+  <div class="thank-stage">
+    <img class="thank-img" src="images/thank.jpg" alt="THANK">
+  </div>
+</section>
+
+<!-- ============== Video Modal ============== -->
+<div class="modal" id="videoModal">
+  <button class="modal-close" id="closeModal">×</button>
+  <video id="modalVideo" controls></video>
+</div>
+
+<!-- ============== PDF Modal (简历 / 全部作品) ============== -->
+<div class="pdf-modal" id="pdfModal">
+  <div class="pdf-nav">
+    <button class="pdf-back" id="pdfBack">
+      <span class="back-arrow">←</span> 返回
+    </button>
+    <div class="pdf-title" id="pdfTitle">RESUME</div>
+    <button class="pdf-close" id="pdfClose" aria-label="关闭">×</button>
+  </div>
+  <iframe id="pdfViewer" class="pdf-viewer" src="" allow="fullscreen"></iframe>
+  <div class="pdf-fallback" id="pdfFallback" style="display:none;">
+    浏览器无法预览 PDF。<br>
+    <a href="#" id="pdfFallbackLink">→ 在新窗口打开</a>
+  </div>
+</div>
+
+<script>
+  (function() {
+    const modal      = document.getElementById('videoModal');
+    const modalVideo = document.getElementById('modalVideo');
+    const closeBtn   = document.getElementById('closeModal');
+
+    function openModal(src) {
+      modalVideo.src = src;
+      modal.classList.add('active');
+      modalVideo.play().catch(() => {});
+    }
+    function closeModal() {
+      modal.classList.remove('active');
+      modalVideo.pause();
+      modalVideo.removeAttribute('src');
+      modalVideo.load();
+    }
+
+    document.querySelectorAll('.video-card').forEach(card => {
+      card.addEventListener('click', () => openModal(card.dataset.src));
+    });
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) closeModal();
+    });
+
+    /* Scroll-triggered pop for THANK image */
+    const thankImg = document.querySelector('.thank-img');
+    if (thankImg && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.25 });
+      io.observe(thankImg);
+    } else if (thankImg) {
+      thankImg.classList.add('is-visible');
+    }
+
+    /* PDF modal: 简历 / 全部作品 */
+    const pdfModal   = document.getElementById('pdfModal');
+    const pdfBack    = document.getElementById('pdfBack');
+    const pdfClose   = document.getElementById('pdfClose');
+    const pdfTitle   = document.getElementById('pdfTitle');
+    const pdfFallback= document.getElementById('pdfFallback');
+    const pdfFallbackLink = document.getElementById('pdfFallbackLink');
+
+    function openPdf(src, title) {
+      // Strategy: completely destroy the old <iframe> and create a brand new one
+      // each time. This is the only reliable way to force Chrome/Edge to actually
+      // re-render the PDF (changing src on the same iframe is unreliable).
+      const oldViewer = document.getElementById('pdfViewer');
+      if (oldViewer) oldViewer.remove();
+
+      const sep = src.indexOf('?') >= 0 ? '&' : '?';
+      const finalSrc = src + sep + '_t=' + Date.now();
+
+      const newViewer = document.createElement('iframe');
+      newViewer.id = 'pdfViewer';
+      newViewer.className = 'pdf-viewer';
+      newViewer.src = finalSrc;
+      newViewer.setAttribute('allow', 'fullscreen');
+      // Insert before the fallback so fallback stays on top
+      pdfModal.insertBefore(newViewer, pdfFallback);
+
+      // Fallback link
+      if (pdfFallbackLink) pdfFallbackLink.href = src;
+      pdfFallback.style.display = 'none';
+      newViewer.addEventListener('error', () => { pdfFallback.style.display = 'block'; });
+
+      pdfTitle.textContent = title || '';
+      pdfModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closePdf() {
+      pdfModal.classList.remove('active');
+      const viewer = document.getElementById('pdfViewer');
+      if (viewer) viewer.remove();
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('[data-pdf]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        openPdf(link.dataset.pdf, link.dataset.pdfTitle);
+      });
+    });
+    pdfBack.addEventListener('click', closePdf);
+    pdfClose.addEventListener('click', closePdf);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && pdfModal.classList.contains('active')) closePdf();
+    });
+
+    /* Flashlight: dim everything except a soft circle around the mouse */
+    const flashlight = document.querySelector('.flashlight');
+    if (flashlight && !('ontouchstart' in window)) {
+      let flX = window.innerWidth / 2;
+      let flY = window.innerHeight / 2;
+      let curFLX = flX;
+      let curFLY = flY;
+
+      flashlight.style.setProperty('--mx', flX + 'px');
+      flashlight.style.setProperty('--my', flY + 'px');
+
+      document.addEventListener('mousemove', (e) => {
+        flX = e.clientX;
+        flY = e.clientY;
+        flashlight.classList.add('is-active');
+      });
+      document.addEventListener('mouseleave', () => flashlight.classList.remove('is-active'));
+      document.addEventListener('mouseenter', () => flashlight.classList.add('is-active'));
+
+      function flashTick() {
+        curFLX += (flX - curFLX) * 0.22;
+        curFLY += (flY - curFLY) * 0.22;
+        flashlight.style.setProperty('--mx', curFLX + 'px');
+        flashlight.style.setProperty('--my', curFLY + 'px');
+        requestAnimationFrame(flashTick);
+      }
+      flashTick();
+    } else if (flashlight) {
+      flashlight.style.display = 'none';
+    }
+  })();
+</script>
+
+</body>
+</html>
